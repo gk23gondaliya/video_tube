@@ -2,7 +2,7 @@ const userService = require('../services/user.service');
 const { MSG } = require('../utils/messages');
 const { successResponse, errorResponse } = require('../utils/apiResponse');
 const { StatusCodes } = require('http-status-codes');
-const { uploadCloudinary } = require('../utils/cloudinary');
+const { uploadCloudinary, deleteFromCloudinary } = require('../utils/cloudinary');
 
 /**
  * Generating Access & Refresh Tokens
@@ -111,12 +111,14 @@ exports.updateUser = async (req, res) =>{
         if(!user)
             return res.send(errorResponse(StatusCodes.NOT_FOUND, true, MSG.NOT_FOUND));
         if(req.files.avatar) {
+            await deleteFromCloudinary(user.avatar);
             let avatarPath = req.files?.avatar[0]?.path;
             const avtar = await uploadCloudinary(avatarPath);
             req.body.avatar = avtar.url || "";
         }
 
         if(req.files.coverImage && req.files.coverImage.length > 0) {
+            await deleteFromCloudinary(user.coverImage);
             let coverImagePath = req.files?.coverImage[0]?.path;
             const coverImage = await uploadCloudinary(coverImagePath);
             req.body.coverImage = coverImage.url || "";

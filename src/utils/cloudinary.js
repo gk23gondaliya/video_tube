@@ -23,3 +23,25 @@ exports.uploadCloudinary = async (localFilePath) => {
         return null;
     }
 };
+
+exports.deleteFromCloudinary = async (fileToDelete) => {
+    try{
+        return await cloudinary.uploader.destroy(fileToDelete, {
+            resource_type: "image"
+        });
+    }catch (err) {
+        console.log(err);
+        return null;
+    }
+};
+
+exports.deleteVideoFromCloudinary = async (fileToDelete) => {
+    try{
+        return await cloudinary.uploader.destroy(fileToDelete, {
+            resource_type: "video"
+        });
+    }catch (err) {
+        console.log(err);
+        return null;
+    }
+};
