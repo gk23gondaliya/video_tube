@@ -29,6 +29,15 @@ class VideoServices {
         }
     };
 
+    // Delete Video
+    async deleteVideo(videoId) {
+        try{
+            return await Video.findByIdAndDelete(videoId);
+        }catch(err) {
+            return err;
+        }
+    };
+
     // Get All Videos
     async getAllVideos(query, userId) {
         try{
@@ -53,6 +62,20 @@ class VideoServices {
                     $match: {
                         owner : new mongoose.Types.ObjectId(userId),
                         isPublished : true
+                    }
+                })
+            }
+
+            if(query.videoId){
+                matchCondition.push({
+                    $match: {
+                        _id: new mongoose.Types.ObjectId(query.videoId),
+                    },
+                })
+                matchCondition.push({
+                    $addFields:{
+                        videoFile: "$videoFile.url",
+                        thumbnail: "$thumbnail.url",
                     }
                 })
             }

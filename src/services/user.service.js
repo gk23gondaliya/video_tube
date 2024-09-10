@@ -56,6 +56,15 @@ class UserServices {
             return err
         }
     };
+
+    // Update User
+    async updateUserByFiled(userId, body) {
+        try{
+            return await User.findOneAndUpdate({watchHistory: videoId}, body, {new: true});
+        }catch (err) {
+            return err
+        }
+    };
 }
 
 module.exports = new UserServices();
